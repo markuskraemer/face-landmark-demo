@@ -1,0 +1,248 @@
+<html>
+    <head>
+        <title>Face Landmark Detection</title>
+        <script type="module" defer src="bundle.js"></script>
+    </head>
+    <body>
+        <div class="containers">
+            <div id="video-container">
+                <video id="video" width="720" height="560" autoplay muted></video>
+            </div>
+            <div id="output-container">
+                <div id="toggleMaximize-button" onclick="toggleMaximize()">maximize</div>
+                <div id="world-container">
+                    <div id="world">
+                        <div id="head">
+
+                            
+
+                            <!--
+                            <div class="hairlayer hairlayer-0">
+                                <div class="hairlayer-0__side hairlayer-0__side-top"></div>
+                                <div class="hairlayer-0__side hairlayer-0__side-left"></div>
+                                <div class="hairlayer-0__side hairlayer-0__side-right"></div>
+                                <div class="hairlayer-0__side hairlayer-0__side-bottom"></div>
+                                <div class="hairlayer-0__side hairlayer-0__side-front"></div>
+                                <div class="hairlayer-0__side hairlayer-0__side-back"></div>
+                            </div>
+                            <div class="hairlayer hairlayer-1">
+                                <div class="hairlayer-1__side hairlayer-1__side-top"></div>
+                                <div class="hairlayer-1__side hairlayer-1__side-left"></div>
+                                <div class="hairlayer-1__side hairlayer-1__side-right"></div>
+                                <div class="hairlayer-1__side hairlayer-1__side-bottom"></div>
+                                <div class="hairlayer-1__side hairlayer-1__side-front"></div>
+                                <div class="hairlayer-1__side hairlayer-1__side-back"></div>
+                            </div>
+                            <div class="hairlayer hairlayer-2">
+                                <div class="hairlayer-2__side hairlayer-2__side-top"></div>
+                                <div class="hairlayer-2__side hairlayer-2__side-left"></div>
+                                <div class="hairlayer-2__side hairlayer-2__side-right"></div>
+                                <div class="hairlayer-2__side hairlayer-2__side-bottom"></div>
+                                <div class="hairlayer-2__side hairlayer-2__side-front"></div>
+                                <div class="hairlayer-2__side hairlayer-2__side-back"></div>
+                            </div>
+                            <div class="hairlayer hairlayer-3">
+                                <div class="hairlayer-3__side hairlayer-3__side-top"></div>
+                                <div class="hairlayer-3__side hairlayer-3__side-left"></div>
+                                <div class="hairlayer-3__side hairlayer-3__side-right"></div>
+                                <div class="hairlayer-3__side hairlayer-3__side-bottom"></div>
+                                <div class="hairlayer-3__side hairlayer-3__side-front"></div>
+                                <div class="hairlayer-3__side hairlayer-3__side-back"></div>
+                            </div>
+                            <div class="hairlayer hairlayer-4">
+                                <div class="hairlayer-4__side hairlayer-4__side-top"></div>
+                                <div class="hairlayer-4__side hairlayer-4__side-left"></div>
+                                <div class="hairlayer-4__side hairlayer-4__side-right"></div>
+                                <div class="hairlayer-4__side hairlayer-4__side-bottom"></div>
+                                <div class="hairlayer-4__side hairlayer-4__side-front"></div>
+                                <div class="hairlayer-4__side hairlayer-4__side-back"></div>
+                            </div>
+                            -->
+                            <div class="head__side head__side-top"></div>
+                            <div class="head__side head__side-bottom"></div>
+                            <div class="head__side head__side-left"></div>
+                            <div class="head__side head__side-right"></div>
+                            <div class="head__side head__side-back"></div>
+                            <div class="head__side head__side-front"></div>
+                            <div id="eye-left" class="eye eye-left">
+                                <div class="eye-inner"></div>
+                            </div>
+                            <div id="eye-right" class="eye eye-right">
+                                <div class="eye-inner"></div>
+                            </div>
+
+                            <div id="nose" class="nose">
+                            </div>
+
+                            <div id="eyebrow-left" class="eyebrow eyebrow-left">
+                                <div id="eyebrow__seqment-0" class="eyebrow__seqment eyebrow__seqment-0">
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-left"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-right"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-back"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-front"></div>
+                                </div>
+                                <div id="eyebrow__seqment-1" class="eyebrow__seqment eyebrow__seqment-1">
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-left"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-right"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-back"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-front"></div>
+                                </div>
+                                <div id="eyebrow__seqment-2" class="eyebrow__seqment eyebrow__seqment-2">                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-left"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-right"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-back"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-front"></div>
+                                </div>
+                                <div id="eyebrow__seqment-3" class="eyebrow__seqment eyebrow__seqment-3">
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-left"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-right"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-back"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-front"></div>
+                                </div>
+                                <div id="eyebrow__seqment-4" class="eyebrow__seqment eyebrow__seqment-4">
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-left"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-right"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-back"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-front"></div>
+                                </div>
+                            </div>
+                            <div id="eyebrow-right" class="eyebrow eyebrow-right">
+                                <div id="eyebrow__seqment-0" class="eyebrow__seqment eyebrow__seqment-0">
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-left"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-right"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-back"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-front"></div>
+                                </div>
+                                <div id="eyebrow__seqment-1" class="eyebrow__seqment eyebrow__seqment-1">
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-left"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-right"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-back"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-front"></div>
+                                </div>
+                                <div id="eyebrow__seqment-2" class="eyebrow__seqment eyebrow__seqment-2">                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-left"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-right"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-back"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-front"></div>
+                                </div>
+                                <div id="eyebrow__seqment-3" class="eyebrow__seqment eyebrow__seqment-3">
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-left"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-right"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-back"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-front"></div>
+                                </div>
+                                <div id="eyebrow__seqment-4" class="eyebrow__seqment eyebrow__seqment-4">
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-top"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-left"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-right"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-back"></div>
+                                    <div class="eyebrow__seqment__side eyebrow__seqment__side-front"></div>
+                                </div>
+                            </div>
+
+                            <div id="mouth" class="mouth">
+                                <div id="mouth-seqments" class="mouth-seqments">
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                    <div class="mouth__seqment">
+                                        <div class="mouth__seqment__side mouth__seqment__side-top"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-left"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-right"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-back"></div>
+                                        <div class="mouth__seqment__side mouth__seqment__side-front"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

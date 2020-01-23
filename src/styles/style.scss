@@ -1,0 +1,647 @@
+$headWidth: 150;
+$headHeight: 200;
+$headDepth: 150;
+
+$headColor:grey;
+$headSideColor:#000000;
+$mouthSize:15;
+$mouthColor:grey;
+$mouthFrontColor:#fff;
+$eyebrowSize: 8;
+$eyebrowColor:grey;
+$eyebrowFrontColor:#fff;
+$eyeInnerColor:#fff;
+
+$hf: .8;
+$rf: -3;
+
+$hairlayer0Color: linear-gradient(black, black);
+$hairlayer0Size: $headDepth + 20;
+$hairlayer0Height: 25;
+$hairLayer0Deg: 88;
+
+$hairlayer1Color: linear-gradient(black, black);
+$hairlayer1Size: $hairlayer0Size * .8;
+$hairlayer1Height: $hairlayer0Height * $hf;
+$hairLayer1Deg: $hairLayer0Deg + $rf;
+
+$hairlayer2Color: linear-gradient(black, black);
+$hairlayer2Size: $hairlayer0Size * .8 * .8;
+$hairlayer2Height: $hairlayer0Height * $hf * $hf;
+$hairLayer2Deg: $hairLayer1Deg + $rf;
+
+$hairlayer3Color: linear-gradient(black, black);
+$hairlayer3Size: $hairlayer0Size * .8 * .8 * .8;
+$hairlayer3Height: $hairlayer0Height * $hf * $hf * $hf;
+$hairLayer3Deg: $hairLayer2Deg + $rf;
+
+$hairlayer4Color: linear-gradient(black, black);
+$hairlayer4Size: $hairlayer0Size * .8 * .8 * .8 * .8;
+$hairlayer4Height: $hairlayer0Height * $hf * $hf * $hf * $hf;
+$hairLayer4Deg: $hairLayer3Deg + $rf;
+
+body {
+    background:grey;
+    margin: 0;
+    padding: 0;
+}
+
+.containers {
+    display: flex;
+    justify-content: center;
+}
+
+#video-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    #video {
+        background:black;
+    }
+
+    .canvas {
+        position: absolute;
+    }
+}
+
+.maximized {
+    position: absolute;
+    width:100vw;
+    height:100vh;
+}
+
+.minimized {
+    position: relative;
+    width:px2rem(720);
+    height:px2rem(560);
+}
+
+#output-container {
+    background-image: linear-gradient(black, grey);
+
+    #world-container {
+        perspective: px2rem(800);
+        width:100%;
+        height:100%;
+    }
+
+    #world {
+        position: absolute;
+        transform-style: preserve-3d;
+        width: px2rem(720);
+        height: px2rem(560);
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+
+    #head {
+        position: absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:0;
+        margin:auto;
+        width: px2rem($headWidth);
+        height: px2rem($headWidth);
+        transform-style: preserve-3d;
+       
+        .head__side, .eye, .eye__side, .eyebrow, .mouth, .nose {
+            position: absolute;
+            backface-visibility: visible;
+            transform-style: preserve-3d;
+            top:0;
+            bottom:0;
+            right:0;
+            left:0;
+            margin:auto;
+        }
+
+        //_______________________________________________________________________________________
+        // hair
+        //_______________________________________________________________________________________
+
+        .hairlayer-0 {
+            position: absolute;
+            transform-style: preserve-3d;
+            width:px2rem($hairlayer0Size);
+            height:px2rem($hairlayer0Size);
+            transform:translate(-50%, -50%) translateY(px2rem(-$headHeight/2-$hairlayer0Height/2)) rotateX($hairLayer0Deg + deg);
+            left:50%;
+            top:50%;
+        }
+    
+        .hairlayer-0__side {
+            position: absolute;
+            transform-style: preserve-3d;
+            background:$hairlayer0Color;
+        } 
+        
+        .hairlayer-0__side-top {
+            width:100%;
+            height:100%;
+            transform:translateZ(px2rem($hairlayer0Height/2));        
+        }
+
+        .hairlayer-0__side-back {
+            width:100%;
+            height:100%;
+            transform:translateZ(px2rem(-$hairlayer0Height/2));        
+        }
+
+        .hairlayer-0__side-front {
+            width:100%;
+            height:px2rem($hairlayer0Height);
+            bottom:px2rem(-$hairlayer0Height/2);
+            transform:rotateX(90deg);
+        }
+
+        .hairlayer-0__side-bottom {
+            width:100%;
+            height:px2rem($hairlayer0Height);
+            top:px2rem(-$hairlayer0Height/2);
+            transform:rotateX(-90deg);        
+        }
+        
+        .hairlayer-0__side-left {
+            width:px2rem($hairlayer0Height);
+            height:px2rem($hairlayer0Size);
+            left:px2rem(-$hairlayer0Height/2);
+            transform:rotateY(-90deg);
+        }
+
+        .hairlayer-0__side-right {
+            width:px2rem($hairlayer0Height);
+            height:px2rem($hairlayer0Size);
+            right:px2rem(-$hairlayer0Height/2);
+            transform:rotateY(90deg);
+        }
+
+        // 1111111111111111111111111111111111111111111111111111111111111
+
+        .hairlayer-1 {
+            position: absolute;
+            transform-style: preserve-3d;
+            width:px2rem($hairlayer1Size);
+            height:px2rem($hairlayer1Size);
+            transform:translate(-50%, -50%) translateY(px2rem(-$headHeight/2-$hairlayer1Height/2-$hairlayer0Height)) rotateX($hairLayer1Deg + deg);
+            left:50%;
+            top:50%;
+        }
+    
+        .hairlayer-1__side {
+            position: absolute;
+            transform-style: preserve-3d;
+            background:$hairlayer1Color;
+        } 
+        
+        .hairlayer-1__side-top {
+            width:100%;
+            height:100%;
+            transform:translateZ(px2rem($hairlayer1Height/2));        
+        }
+
+        .hairlayer-1__side-back {
+            width:100%;
+            height:100%;
+            transform:translateZ(px2rem(-$hairlayer1Height/2));        
+        }
+
+        .hairlayer-1__side-front {
+            width:100%;
+            height:px2rem($hairlayer1Height);
+            bottom:px2rem(-$hairlayer1Height/2);
+            transform:rotateX(90deg);
+        }
+
+        .hairlayer-1__side-bottom {
+            width:100%;
+            height:px2rem($hairlayer1Height);
+            top:px2rem(-$hairlayer1Height/2);
+            transform:rotateX(-90deg);        
+        }
+        
+        .hairlayer-1__side-left {
+            width:px2rem($hairlayer1Height);
+            height:px2rem($hairlayer1Size);
+            left:px2rem(-$hairlayer1Height/2);
+            transform:rotateY(-90deg);
+        }
+
+        .hairlayer-1__side-right {
+            width:px2rem($hairlayer1Height);
+            height:px2rem($hairlayer1Size);
+            right:px2rem(-$hairlayer1Height/2);
+            transform:rotateY(90deg);
+        }
+
+        // 2222222222222222222222222222222222222222222222222222222222222222
+
+
+        .hairlayer-2 {
+            position: absolute;
+            transform-style: preserve-3d;
+            width:px2rem($hairlayer2Size);
+            height:px2rem($hairlayer2Size);
+            transform:translate(-50%, -50%) translateY(px2rem(-$headHeight/2 - $hairlayer0Height - $hairlayer1Height - $hairlayer2Height/2)) rotateX($hairLayer2Deg + deg);
+            left:50%;
+            top:50%;
+        }
+    
+        .hairlayer-2__side {
+            position: absolute;
+            transform-style: preserve-3d;
+            background:$hairlayer2Color;
+        } 
+         
+        .hairlayer-2__side-top {
+            width:100%;
+            height:100%;
+            transform:translateZ(px2rem($hairlayer2Height/2));        
+        }
+
+        .hairlayer-2__side-back {
+            width:100%;
+            height:100%;
+            transform:translateZ(px2rem(-$hairlayer2Height/2));        
+        }
+
+        .hairlayer-2__side-front {
+            width:100%;
+            height:px2rem($hairlayer2Height);
+            bottom:px2rem(-$hairlayer2Height/2);
+            transform:rotateX(90deg);
+        }
+
+        .hairlayer-2__side-bottom {
+            width:100%;
+            height:px2rem($hairlayer2Height);
+            top:px2rem(-$hairlayer2Height/2);
+            transform:rotateX(-90deg);        
+        }
+        
+        .hairlayer-2__side-left {
+            width:px2rem($hairlayer2Height);
+            height:px2rem($hairlayer2Size);
+            left:px2rem(-$hairlayer2Height/2);
+            transform:rotateY(-90deg);
+        }
+
+        .hairlayer-2__side-right {
+            width:px2rem($hairlayer2Height);
+            height:px2rem($hairlayer2Size);
+            right:px2rem(-$hairlayer2Height/2);
+            transform:rotateY(90deg);
+        }
+
+        // 33333333333333333333333333333333333333333333333333
+        .hairlayer-3 {
+            position: absolute;
+            transform-style: preserve-3d;
+            width:px2rem($hairlayer3Size);
+            height:px2rem($hairlayer3Size);
+            transform:translate(-50%, -50%) translateY(px2rem(-$headHeight/2 - $hairlayer0Height - $hairlayer1Height - $hairlayer2Height - $hairlayer3Height/2)) rotateX($hairLayer3Deg + deg);
+            left:50%;
+            top:50%;
+        }
+    
+        .hairlayer-3__side {
+            position: absolute;
+            transform-style: preserve-3d;
+            background:$hairlayer3Color;
+        } 
+        
+        .hairlayer-3__side-top {
+            width:100%;
+            height:100%;
+            transform:translateZ(px2rem($hairlayer3Height/2));        
+        }
+
+        .hairlayer-3__side-back {
+            width:100%;
+            height:100%;
+            transform:translateZ(px2rem(-$hairlayer3Height/2));        
+        }
+
+        .hairlayer-3__side-front {
+            width:100%;
+            height:px2rem($hairlayer3Height);
+            bottom:px2rem(-$hairlayer3Height/2);
+            transform:rotateX(90deg);
+        }
+
+        .hairlayer-3__side-bottom {
+            width:100%;
+            height:px2rem($hairlayer3Height);
+            top:px2rem(-$hairlayer3Height/2);
+            transform:rotateX(-90deg);        
+        }
+        
+        .hairlayer-3__side-left {
+            width:px2rem($hairlayer3Height);
+            height:px2rem($hairlayer3Size);
+            left:px2rem(-$hairlayer3Height/2);
+            transform:rotateY(-90deg);
+        }
+
+        .hairlayer-3__side-right {
+            width:px2rem($hairlayer3Height);
+            height:px2rem($hairlayer3Size);
+            right:px2rem(-$hairlayer3Height/2);
+            transform:rotateY(90deg);
+        }
+
+        // 4444444444444444444444444444444444444444444444444444444444444
+
+        .hairlayer-4 {
+            position: absolute;
+            transform-style: preserve-3d;
+            width:px2rem($hairlayer4Size);
+            height:px2rem($hairlayer4Size);
+            transform:translate(-50%, -50%) translateY(px2rem(-$headHeight/2 - $hairlayer0Height - $hairlayer1Height - $hairlayer2Height - $hairlayer3Height - $hairlayer4Height/2)) rotateX($hairLayer4Deg + deg);
+            left:50%;
+            top:50%;
+        }
+    
+        .hairlayer-4__side {
+            position: absolute;
+            transform-style: preserve-3d;
+            background:$hairlayer4Color;
+        } 
+        
+        .hairlayer-4__side-top {
+            width:100%;
+            height:100%;
+            transform:translateZ(px2rem($hairlayer4Height/2));        
+        }
+
+        .hairlayer-4__side-back {
+            width:100%;
+            height:100%;
+            transform:translateZ(px2rem(-$hairlayer4Height/2));        
+        }
+
+        .hairlayer-4__side-front {
+            width:100%;
+            height:px2rem($hairlayer4Height);
+            bottom:px2rem(-$hairlayer4Height/2);
+            transform:rotateX(90deg);
+        }
+
+        .hairlayer-4__side-bottom {
+            width:100%;
+            height:px2rem($hairlayer4Height);
+            top:px2rem(-$hairlayer4Height/2);
+            transform:rotateX(-90deg);        
+        }
+        
+        .hairlayer-4__side-left {
+            width:px2rem($hairlayer4Height);
+            height:px2rem($hairlayer4Size);
+            left:px2rem(-$hairlayer4Height/2);
+            transform:rotateY(-90deg);
+        }
+
+        .hairlayer-4__side-right {
+            width:px2rem($hairlayer4Height);
+            height:px2rem($hairlayer4Size);
+            right:px2rem(-$hairlayer4Height/2);
+            transform:rotateY(90deg);
+        }
+
+
+
+        //_______________________________________________________________________________________
+        // head
+        //_______________________________________________________________________________________
+
+        .head__side {
+           // background-color: $headColor;
+           background-image: radial-gradient(black, black);
+            // border:1px solid white;
+        }
+
+        .head__side-top {
+            width: px2rem($headWidth);
+            height: px2rem($headDepth);
+            transform: translateY(px2rem(-$headHeight/2)) rotateX(90deg);
+        }
+
+        .head__side-bottom {
+            width: px2rem($headWidth);
+            height: px2rem($headDepth);
+            transform: translateY(px2rem($headHeight/2)) rotateX(-90deg) ;
+        }
+            
+        .head__side-left {
+            width: px2rem($headDepth);
+            height: px2rem($headHeight);
+            transform: translateX(px2rem(-$headDepth/2)) rotateY(-90deg);
+            background: $headSideColor;
+        }
+
+        .head__side-right {
+            width: px2rem($headDepth);
+            height: px2rem($headHeight);
+            transform: translateX(px2rem($headDepth/2)) rotateY(90deg);
+            background: $headSideColor;
+        }
+            
+        .head__side-back {
+            width: px2rem($headWidth);
+            height: px2rem($headHeight);
+            transform: rotateY(180deg) translateZ(px2rem($headDepth/2));
+        }
+
+        .head__side-front {
+            width: px2rem($headWidth);
+            height: px2rem($headHeight);
+            transform: rotateY(0) translateZ(px2rem($headDepth/2));
+        }
+
+        .nose {
+            transform-style: preserve-3d;
+            width: px2rem(20);
+            height: px2rem(20);
+            background-color: #333333;
+            border-radius: 50%;
+            transform: translateZ(px2rem($headDepth/2));            
+        }
+    
+        .eye {
+            transform-style: preserve-3d;
+            width: px2rem(40);
+            height: px2rem(40);
+            background-color: grey;
+            border-radius: 50%;
+        }
+
+        .eye-inner {
+            position: absolute;
+            width:50%;
+            height:50%;
+            background-color: $eyeInnerColor;
+            border-radius: 50%;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            margin:auto;
+        }
+
+        .eye-left {
+            transform: translateX(px2rem(-$headWidth/4)) translateY(px2rem(-$headHeight/4)) translateZ(px2rem($headDepth/2));
+        }
+
+        .eye-right {
+            transform: translateX(px2rem($headWidth/4)) translateY(px2rem(-$headHeight/4)) translateZ(px2rem($headDepth/2));
+        }
+
+        .eye__side {
+            backface-visibility: visible;
+            width: 100%;
+            height: 100%;
+        }
+
+        .eye__side-front {
+            transform: rotateY(0) translateZ(px2rem(2));                    
+        }
+
+        //_________________________________________________________________________________________________________
+        //
+        // eyebrow
+        // ________________________________________________________________________________________________________
+
+        .eyebrow {
+            transform-style: preserve-3d;
+            width:px2rem(10);
+            height:px2rem(30);
+            transform: translateZ(px2rem($headDepth/2 + ($hairlayer0Size - $headDepth)));
+        }
+
+        .eyebrow__seqment {
+            position: absolute;
+            width:px2rem(5);
+            height:px2rem(5); 
+            transform-origin: left;
+            transform-style: preserve-3d;
+        }
+
+        .eyebrow__seqment__side {
+            position: absolute;
+            background-color: $eyebrowColor;
+        } 
+
+        .eyebrow__seqment__side-top {
+            width:100%;
+            height:px2rem($eyebrowSize);
+            transform:translateZ(px2rem($eyebrowSize/2));        
+            background-color: $eyebrowFrontColor;
+        }
+
+        .eyebrow__seqment__side-front {
+            width:100%;
+            height:px2rem($eyebrowSize);
+            bottom:px2rem(-$eyebrowSize/2);
+            transform:rotateX(90deg);
+        }
+
+        .eyebrow__seqment__side-back {
+            width:100%;
+            height:px2rem($eyebrowSize);
+            top:px2rem(-$eyebrowSize/2);
+            transform:rotateX(-90deg);        
+        }
+        
+        .eyebrow__seqment__side-left {
+            width:px2rem($eyebrowSize);
+            height:px2rem($eyebrowSize);
+            left:px2rem(-$eyebrowSize/2);
+            transform:rotateY(-90deg);
+        }
+
+        .eyebrow__seqment__side-right {
+            width:px2rem($eyebrowSize);
+            height:px2rem($eyebrowSize);
+            right:px2rem(-$eyebrowSize/2);
+            transform:rotateY(90deg);
+        }
+
+
+
+        //_________________________________________________________________________________________________________
+        //
+        // mouth
+        // ________________________________________________________________________________________________________
+
+        .mouth {
+            transform-style: preserve-3d;
+            width:px2rem(2);
+            height:px2rem(2);
+            transform: translateZ(px2rem($headDepth/2));
+        }
+
+        .mouth-seqments {
+            position: absolute;
+            transform-style: preserve-3d;
+            background-color: $mouthColor;
+            transform: translate(-50%, -50%) translateZ(px2rem($mouthSize/2));
+            left:50%;
+            top:50%;
+        }
+        
+        .mouth__seqment {
+            position: absolute;
+            width:px2rem($mouthSize);
+            height:px2rem($mouthSize);
+            transform-origin: left;
+            transform-style: preserve-3d;
+        }
+
+        .mouth__seqment__side {
+            position: absolute;
+            background-color: $mouthColor;
+        } 
+
+        .mouth__seqment__side-top {
+            width:100%;
+            height:px2rem($mouthSize);
+            transform:translateZ(px2rem($mouthSize/2));        
+            background-color: $mouthFrontColor;
+        }
+
+        .mouth__seqment__side-front {
+            width:100%;
+            height:px2rem($mouthSize);
+            bottom:px2rem(-$mouthSize/2);
+            transform:rotateX(90deg);
+        }
+
+        .mouth__seqment__side-back {
+            width:100%;
+            height:px2rem($mouthSize);
+            top:px2rem(-$mouthSize/2);
+            transform:rotateX(-90deg);        
+        }
+        
+        .mouth__seqment__side-left {
+            width:px2rem($mouthSize);
+            height:px2rem($mouthSize);
+            left:px2rem(-$mouthSize/2);
+            transform:rotateY(-90deg);
+        }
+
+        .mouth__seqment__side-right {
+            width:px2rem($mouthSize);
+            height:px2rem($mouthSize);
+            right:px2rem(-$mouthSize/2);
+            transform:rotateY(90deg);
+        }
+
+    }
+}
+
