@@ -41,7 +41,7 @@ export class Head {
         this.updateRefWidth(results);
 
         if(this._yaw != 0){
-            //return;
+            return;
         }
 
         this._yaw = Geo.getYaw(results);
