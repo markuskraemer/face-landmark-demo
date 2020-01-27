@@ -10,7 +10,7 @@ export class Head {
 
     public static headWidth = 150;
     public static headHeight = 200;
-    public static headDepth = 200;
+    public static headDepth = 75;
 
     private _eyeOrigin:IPoint = {
         x: Head.headWidth/4,

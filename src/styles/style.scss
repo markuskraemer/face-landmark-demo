@@ -1,57 +1,40 @@
 $headWidth: 150;
 $headHeight: 200;
-$headDepth: 150;
+$headDepth: 75;
 
-$headColor:linear-gradient(white, #ffdd00, #ffdd00);
+$headColor1:white;    
+$headColor2:#ffdd00;    
+
+
+$headColor:linear-gradient($headColor1, $headColor2, $headColor2);
 $headSideColor:$headColor;
 
 $mouthSize:15;
 $mouthColor:#dd1100;
-$mouthFrontColor:#ff3300;
+$mouthFrontColor:#dd3300;
 
 $eyebrowSize: 8;
 $eyebrowColor:#22dd22;
 $eyebrowFrontColor:#009900;
 
-$eyeInnerColor:lightblue;
+$eyeInnerColor:blue;
 $eyecolor: lightgrey;
 
 $iromidColor: orange;
 $iromidWidth: 20;
 $iromidHeight: $headDepth + 20;
 
+$jawsColor1:#ffdd00;    
+$jawsColor2:#996666;    
+
 $jawsWidth:$headWidth + 20;
+$jawsDepth:$headDepth + 20;
 $jawsHeight:$headHeight / 2.2;
-$jawsColor:#ffdd00;
+$jawsColor:linear-gradient($jawsColor2, $jawsColor1, $jawsColor1);
 
 
 $hf: .8;
 $rf: -3;
-
-$hairlayer0Color: linear-gradient(black, black);
-$hairlayer0Size: $headDepth + 20;
-$hairlayer0Height: 25;
-$hairLayer0Deg: 88;
-
-$hairlayer1Color: linear-gradient(black, black);
-$hairlayer1Size: $hairlayer0Size * .8;
-$hairlayer1Height: $hairlayer0Height * $hf;
-$hairLayer1Deg: $hairLayer0Deg + $rf;
-
-$hairlayer2Color: linear-gradient(black, black);
-$hairlayer2Size: $hairlayer0Size * .8 * .8;
-$hairlayer2Height: $hairlayer0Height * $hf * $hf;
-$hairLayer2Deg: $hairLayer1Deg + $rf;
-
-$hairlayer3Color: linear-gradient(black, black);
-$hairlayer3Size: $hairlayer0Size * .8 * .8 * .8;
-$hairlayer3Height: $hairlayer0Height * $hf * $hf * $hf;
-$hairLayer3Deg: $hairLayer2Deg + $rf;
-
-$hairlayer4Color: linear-gradient(black, black);
-$hairlayer4Size: $hairlayer0Size * .8 * .8 * .8 * .8;
-$hairlayer4Height: $hairlayer0Height * $hf * $hf * $hf * $hf;
-$hairLayer4Deg: $hairLayer3Deg + $rf;
 
 body {
     margin: 0;
@@ -91,7 +74,7 @@ body {
 }
 
 #output-container {
-    background-image: linear-gradient(black, grey);
+    background-image: linear-gradient(violet, red);
 
     #world-container {
         perspective: px2rem(800);
@@ -226,339 +209,50 @@ body {
         .jaws__side-back {
             width:px2rem($jawsWidth);
             height:px2rem($jawsHeight);
-            top:px2rem(-$jawsWidth/2);
-            transform:rotateX(-90deg);
+            top:px2rem(-$jawsDepth/2);
+            transform:rotateX(90deg);
         }
 
         .jaws__side-front {
             width:px2rem($jawsWidth);
             height:px2rem($jawsHeight);
-            bottom:px2rem(-$jawsWidth/2);
+            bottom:px2rem(-$jawsDepth/2);
             transform:rotateX(90deg);
         }
 
         .jaws__side-top {
             width:px2rem($jawsWidth);
-            height:px2rem($jawsWidth);
+            height:px2rem($jawsDepth);
             top:0;
             bottom:0;
             margin:auto;
             transform:translateZ(px2rem($jawsHeight/2));            
+            background:$jawsColor1;    
         }
 
         .jaws__side-bottom {
             width:px2rem($jawsWidth);
-            height:px2rem($jawsWidth);
+            height:px2rem($jawsDepth);
             top:0;
             bottom:0;
             margin:auto;
-            transform:translateZ(px2rem(-$jawsHeight/2));        
+            transform:translateZ(px2rem(-$jawsHeight/2));    
+            background:$jawsColor2;    
         }
         
         .jaws__side-left {
-            width:px2rem($jawsWidth);
+            width:px2rem($jawsDepth);
             height:px2rem($jawsHeight);
-            left:px2rem(-$jawsWidth/2);
+            left:px2rem(-$jawsDepth/2);
             transform:rotateX(90deg) rotateY(-90deg);
         }
 
         .jaws__side-right {
-            width:px2rem($jawsWidth);
+            width:px2rem($jawsDepth);
             height:px2rem($jawsHeight);
-            right:px2rem(-$jawsWidth/2);
+            right:px2rem(-$jawsDepth/2);
             transform:rotateX(90deg) rotateY(90deg);
         }
-
-        // 0000000000000000000000000000000000000000000000000000000000000000000000000
-        .hairlayer-0 {
-            position: absolute;
-            transform-style: preserve-3d;
-            width:px2rem($hairlayer0Size);
-            height:px2rem($hairlayer0Size);
-            transform:translate(-50%, -50%) translateY(px2rem(-$headHeight/2-$hairlayer0Height/2)) rotateX($hairLayer0Deg + deg);
-            left:50%;
-            top:50%;
-        }
-    
-        .hairlayer-0__side {
-            position: absolute;
-            transform-style: preserve-3d;
-            background:$hairlayer0Color;
-        } 
-        
-        .hairlayer-0__side-top {
-            width:100%;
-            height:100%;
-            transform:translateZ(px2rem($hairlayer0Height/2));        
-        }
-
-        .hairlayer-0__side-back {
-            width:100%;
-            height:100%;
-            transform:translateZ(px2rem(-$hairlayer0Height/2));        
-        }
-
-        .hairlayer-0__side-front {
-            width:100%;
-            height:px2rem($hairlayer0Height);
-            bottom:px2rem(-$hairlayer0Height/2);
-            transform:rotateX(90deg);
-        }
-
-        .hairlayer-0__side-bottom {
-            width:100%;
-            height:px2rem($hairlayer0Height);
-            top:px2rem(-$hairlayer0Height/2);
-            transform:rotateX(-90deg);        
-        }
-        
-        .hairlayer-0__side-left {
-            width:px2rem($hairlayer0Height);
-            height:px2rem($hairlayer0Size);
-            left:px2rem(-$hairlayer0Height/2);
-            transform:rotateY(-90deg);
-        }
-
-        .hairlayer-0__side-right {
-            width:px2rem($hairlayer0Height);
-            height:px2rem($hairlayer0Size);
-            right:px2rem(-$hairlayer0Height/2);
-            transform:rotateY(90deg);
-        }
-
-        // 1111111111111111111111111111111111111111111111111111111111111
-
-        .hairlayer-1 {
-            position: absolute;
-            transform-style: preserve-3d;
-            width:px2rem($hairlayer1Size);
-            height:px2rem($hairlayer1Size);
-            transform:translate(-50%, -50%) translateY(px2rem(-$headHeight/2-$hairlayer1Height/2-$hairlayer0Height)) rotateX($hairLayer1Deg + deg);
-            left:50%;
-            top:50%;
-        }
-    
-        .hairlayer-1__side {
-            position: absolute;
-            transform-style: preserve-3d;
-            background:$hairlayer1Color;
-        } 
-        
-        .hairlayer-1__side-top {
-            width:100%;
-            height:100%;
-            transform:translateZ(px2rem($hairlayer1Height/2));        
-        }
-
-        .hairlayer-1__side-back {
-            width:100%;
-            height:100%;
-            transform:translateZ(px2rem(-$hairlayer1Height/2));        
-        }
-
-        .hairlayer-1__side-front {
-            width:100%;
-            height:px2rem($hairlayer1Height);
-            bottom:px2rem(-$hairlayer1Height/2);
-            transform:rotateX(90deg);
-        }
-
-        .hairlayer-1__side-bottom {
-            width:100%;
-            height:px2rem($hairlayer1Height);
-            top:px2rem(-$hairlayer1Height/2);
-            transform:rotateX(-90deg);        
-        }
-        
-        .hairlayer-1__side-left {
-            width:px2rem($hairlayer1Height);
-            height:px2rem($hairlayer1Size);
-            left:px2rem(-$hairlayer1Height/2);
-            transform:rotateY(-90deg);
-        }
-
-        .hairlayer-1__side-right {
-            width:px2rem($hairlayer1Height);
-            height:px2rem($hairlayer1Size);
-            right:px2rem(-$hairlayer1Height/2);
-            transform:rotateY(90deg);
-        }
-
-        // 2222222222222222222222222222222222222222222222222222222222222222
-
-
-        .hairlayer-2 {
-            position: absolute;
-            transform-style: preserve-3d;
-            width:px2rem($hairlayer2Size);
-            height:px2rem($hairlayer2Size);
-            transform:translate(-50%, -50%) translateY(px2rem(-$headHeight/2 - $hairlayer0Height - $hairlayer1Height - $hairlayer2Height/2)) rotateX($hairLayer2Deg + deg);
-            left:50%;
-            top:50%;
-        }
-    
-        .hairlayer-2__side {
-            position: absolute;
-            transform-style: preserve-3d;
-            background:$hairlayer2Color;
-        } 
-         
-        .hairlayer-2__side-top {
-            width:100%;
-            height:100%;
-            transform:translateZ(px2rem($hairlayer2Height/2));        
-        }
-
-        .hairlayer-2__side-back {
-            width:100%;
-            height:100%;
-            transform:translateZ(px2rem(-$hairlayer2Height/2));        
-        }
-
-        .hairlayer-2__side-front {
-            width:100%;
-            height:px2rem($hairlayer2Height);
-            bottom:px2rem(-$hairlayer2Height/2);
-            transform:rotateX(90deg);
-        }
-
-        .hairlayer-2__side-bottom {
-            width:100%;
-            height:px2rem($hairlayer2Height);
-            top:px2rem(-$hairlayer2Height/2);
-            transform:rotateX(-90deg);        
-        }
-        
-        .hairlayer-2__side-left {
-            width:px2rem($hairlayer2Height);
-            height:px2rem($hairlayer2Size);
-            left:px2rem(-$hairlayer2Height/2);
-            transform:rotateY(-90deg);
-        }
-
-        .hairlayer-2__side-right {
-            width:px2rem($hairlayer2Height);
-            height:px2rem($hairlayer2Size);
-            right:px2rem(-$hairlayer2Height/2);
-            transform:rotateY(90deg);
-        }
-
-        // 33333333333333333333333333333333333333333333333333
-        .hairlayer-3 {
-            position: absolute;
-            transform-style: preserve-3d;
-            width:px2rem($hairlayer3Size);
-            height:px2rem($hairlayer3Size);
-            transform:translate(-50%, -50%) translateY(px2rem(-$headHeight/2 - $hairlayer0Height - $hairlayer1Height - $hairlayer2Height - $hairlayer3Height/2)) rotateX($hairLayer3Deg + deg);
-            left:50%;
-            top:50%;
-        }
-    
-        .hairlayer-3__side {
-            position: absolute;
-            transform-style: preserve-3d;
-            background:$hairlayer3Color;
-        } 
-        
-        .hairlayer-3__side-top {
-            width:100%;
-            height:100%;
-            transform:translateZ(px2rem($hairlayer3Height/2));        
-        }
-
-        .hairlayer-3__side-back {
-            width:100%;
-            height:100%;
-            transform:translateZ(px2rem(-$hairlayer3Height/2));        
-        }
-
-        .hairlayer-3__side-front {
-            width:100%;
-            height:px2rem($hairlayer3Height);
-            bottom:px2rem(-$hairlayer3Height/2);
-            transform:rotateX(90deg);
-        }
-
-        .hairlayer-3__side-bottom {
-            width:100%;
-            height:px2rem($hairlayer3Height);
-            top:px2rem(-$hairlayer3Height/2);
-            transform:rotateX(-90deg);        
-        }
-        
-        .hairlayer-3__side-left {
-            width:px2rem($hairlayer3Height);
-            height:px2rem($hairlayer3Size);
-            left:px2rem(-$hairlayer3Height/2);
-            transform:rotateY(-90deg);
-        }
-
-        .hairlayer-3__side-right {
-            width:px2rem($hairlayer3Height);
-            height:px2rem($hairlayer3Size);
-            right:px2rem(-$hairlayer3Height/2);
-            transform:rotateY(90deg);
-        }
-
-        // 4444444444444444444444444444444444444444444444444444444444444
-
-        .hairlayer-4 {
-            position: absolute;
-            transform-style: preserve-3d;
-            width:px2rem($hairlayer4Size);
-            height:px2rem($hairlayer4Size);
-            transform:translate(-50%, -50%) translateY(px2rem(-$headHeight/2 - $hairlayer0Height - $hairlayer1Height - $hairlayer2Height - $hairlayer3Height - $hairlayer4Height/2)) rotateX($hairLayer4Deg + deg);
-            left:50%;
-            top:50%;
-        }
-    
-        .hairlayer-4__side {
-            position: absolute;
-            transform-style: preserve-3d;
-            background:$hairlayer4Color;
-        } 
-        
-        .hairlayer-4__side-top {
-            width:100%;
-            height:100%;
-            transform:translateZ(px2rem($hairlayer4Height/2));        
-        }
-
-        .hairlayer-4__side-back {
-            width:100%;
-            height:100%;
-            transform:translateZ(px2rem(-$hairlayer4Height/2));        
-        }
-
-        .hairlayer-4__side-front {
-            width:100%;
-            height:px2rem($hairlayer4Height);
-            bottom:px2rem(-$hairlayer4Height/2);
-            transform:rotateX(90deg);
-        }
-
-        .hairlayer-4__side-bottom {
-            width:100%;
-            height:px2rem($hairlayer4Height);
-            top:px2rem(-$hairlayer4Height/2);
-            transform:rotateX(-90deg);        
-        }
-        
-        .hairlayer-4__side-left {
-            width:px2rem($hairlayer4Height);
-            height:px2rem($hairlayer4Size);
-            left:px2rem(-$hairlayer4Height/2);
-            transform:rotateY(-90deg);
-        }
-
-        .hairlayer-4__side-right {
-            width:px2rem($hairlayer4Height);
-            height:px2rem($hairlayer4Size);
-            right:px2rem(-$hairlayer4Height/2);
-            transform:rotateY(90deg);
-        }
-
-
 
         //_______________________________________________________________________________________
         // head
@@ -572,6 +266,7 @@ body {
             width: px2rem($headWidth);
             height: px2rem($headDepth);
             transform: translateY(px2rem(-$headHeight/2)) rotateX(90deg);
+            background: $headColor1;
         }
 
         .head__side-bottom {
@@ -583,14 +278,14 @@ body {
         .head__side-left {
             width: px2rem($headDepth);
             height: px2rem($headHeight);
-            transform: translateX(px2rem(-$headDepth/2)) rotateY(-90deg);
+            transform: translateX(px2rem(-$headWidth/2)) rotateY(-90deg);
             background: $headSideColor;
         }
 
         .head__side-right {
             width: px2rem($headDepth);
             height: px2rem($headHeight);
-            transform: translateX(px2rem($headDepth/2)) rotateY(90deg);
+            transform: translateX(px2rem($headWidth/2)) rotateY(90deg);
             background: $headSideColor;
         }
             
@@ -608,9 +303,9 @@ body {
 
         .nose {
             transform-style: preserve-3d;
-            width: px2rem(20);
-            height: px2rem(20);
-            background-color: #333333;
+            width: px2rem(10);
+            height: px2rem(10);
+            background-color: orange;
             border-radius: 50%;
             transform: translateZ(px2rem($headDepth/2));            
         }
@@ -663,7 +358,7 @@ body {
             transform-style: preserve-3d;
             width:px2rem(10);
             height:px2rem(30);
-            transform: translateZ(px2rem($headDepth/2 + ($hairlayer0Size - $headDepth)));
+            transform: translateZ(px2rem($headDepth/2 + $eyebrowSize));
         }
 
         .eyebrow__seqment {
