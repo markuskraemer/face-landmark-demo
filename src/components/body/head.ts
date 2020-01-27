@@ -41,7 +41,7 @@ export class Head {
         this.updateRefWidth(results);
 
         if(this._yaw != 0){
-            return;
+           // return;
         }
 
         this._yaw = Geo.getYaw(results);
@@ -76,7 +76,7 @@ export class Head {
         this._mouth.setShape(results.landmarks.getMouth(), this._refWidth * 0.5);
         this._mouth.setPosition({
             x: 0,
-            y: Head.headHeight/6
+            y: Head.headHeight/4
         });
 
         this.update();
