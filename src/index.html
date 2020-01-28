@@ -12,8 +12,20 @@
                 <div id="toggleMaximize-button" onclick="toggleMaximize()">maximize</div>
                 <div id="world-container">
                     <div id="world">
-                        <div id="head">
-
+                        <div id="smiley-head" class="invisible smiley">
+                            <div id="eye-left" class="container eye smiley__eye-left"></div>
+                            <div id="eye-right" class="container eye smiley__eye-right"></div>
+                            <svg id="eyebrow-left" class="container eyebrow smiley__eyebrow-left">
+                                <path></path>
+                            </svg>
+                            <svg id="eyebrow-right" class="container eyebrow smiley__eyebrow-right">
+                                <path></path>
+                            </svg>
+                            <svg id="mouth" class="container smiley__mouth">
+                                <path></path>
+                            </svg>        
+                        </div>
+                        <div id="head" class="invisible">
                             <div class="iro iro-mid">
                                 <div class="iro__side iro__side-top"></div>
                                 <div class="iro__side iro__side-left"></div>
@@ -231,7 +243,7 @@
                             </div>
 
                         </div>
-                    </div>
+                    </svg>
                 </div>
             </div>
         </div>

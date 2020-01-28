@@ -1,0 +1,38 @@
+
+.smiley{
+    background:white;
+    width:300px;    
+    height:400px;
+    border-radius:50%;    
+    position: absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    margin:auto;
+}
+
+.container {
+    position: absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    margin:auto;    
+}
+
+.eye {
+    position: absolute;
+    background:black;
+    border-radius:50%;
+    width: 10px;
+    height: 10px;
+}
+
+.eyebrow {
+    position: absolute;
+}
+
+.smiley__mouth {
+    position: absolute;
+}

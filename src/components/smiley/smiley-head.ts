@@ -1,20 +1,19 @@
 import * as faceapi from 'face-api.js';
 import { Geo } from '../../utils/geo';
 import { TweenLite } from 'gsap';
-import { Mouth } from './mouth';
-import { Eyebrow } from './eyebrow';
 import { IPoint } from 'face-api.js';
-import { Eye } from './eye';
+import { SmileyEye } from './smiley-eye';
+import { SmileyMouth } from './smiley-mouth';
+import { SmileyEyebrow } from './smiley-eyebrow';
 
-export class Head {
+export class SmileyHead {
 
-    public static headWidth = 150;
-    public static headHeight = 200;
-    public static headDepth = 75;
+    public static headWidth = 300;
+    public static headHeight = 300;
 
     private _eyeOrigin:IPoint = {
-        x: Head.headWidth/4,
-        y:- Head.headHeight/6
+        x: SmileyHead.headWidth/4,
+        y:- SmileyHead.headHeight/6
     };
 
     private _refWidth:number = 0;
@@ -22,18 +21,18 @@ export class Head {
     private _pitch:number = 0;
     private _yaw:number = 0;
 
-    private _leftEyebrow:Eyebrow;
-    private _rightEyebrow:Eyebrow;
-    private _leftEye:Eye;
-    private _rightEye:Eye;
-    private _mouth:Mouth;
+    private _leftEyebrow:SmileyEyebrow;
+    private _rightEyebrow:SmileyEyebrow;
+    private _leftEye:SmileyEye;
+    private _rightEye:SmileyEye;
+    private _mouth:SmileyMouth;
 
     constructor(public element:HTMLDivElement) {
-        this._leftEyebrow = new Eyebrow(element.querySelector('#eyebrow-left'));
-        this._rightEyebrow = new Eyebrow(element.querySelector('#eyebrow-right'));
-        this._leftEye = new Eye(element.querySelector('#eye-left'));
-        this._rightEye = new Eye(element.querySelector('#eye-right'));
-        this._mouth = new Mouth(element.querySelector('#mouth'));
+        this._leftEyebrow = new SmileyEyebrow(element.querySelector('#eyebrow-left'));
+        this._rightEyebrow = new SmileyEyebrow(element.querySelector('#eyebrow-right'));
+        this._leftEye = new SmileyEye(element.querySelector('#eye-left'));
+        this._rightEye = new SmileyEye(element.querySelector('#eye-right'));
+        this._mouth = new SmileyMouth(element.querySelector('#mouth'));
     }
 
     public setData(results:faceapi.WithFaceLandmarks<any>) {
@@ -41,7 +40,7 @@ export class Head {
         this.updateRefWidth(results);
 
         if(this._yaw != 0){
-           // return;
+          //  return;
         }
 
         this._yaw = Geo.getYaw(results);
@@ -50,33 +49,33 @@ export class Head {
         const leftEyebrowOffset = Geo.getLeftEyebrowOffset(results);
         this._leftEyebrow.setShape(results.landmarks.getLeftEyeBrow());
         this._leftEyebrow.setPosition({
-            x: (-this._eyeOrigin.x) + Head.headHeight/4 * leftEyebrowOffset.x,
-            y: this._eyeOrigin.y - Head.headHeight/10 - Head.headHeight/4 * leftEyebrowOffset.y
+            x: (-this._eyeOrigin.x) + SmileyHead.headHeight/4 * leftEyebrowOffset.x,
+            y: this._eyeOrigin.y - SmileyHead.headHeight/10 - SmileyHead.headHeight/4 * leftEyebrowOffset.y
         });
 
         const rightEyebrowOffset = Geo.getRightEyebrowOffset(results);
         this._rightEyebrow.setShape(results.landmarks.getRightEyeBrow());
         this._rightEyebrow.setPosition({
-            x: this._eyeOrigin.x - Head.headHeight/4 * rightEyebrowOffset.x,
-            y: this._eyeOrigin.y - Head.headHeight/10 - Head.headHeight/4 * rightEyebrowOffset.y
+            x: this._eyeOrigin.x - SmileyHead.headHeight/4 * rightEyebrowOffset.x,
+            y: this._eyeOrigin.y - SmileyHead.headHeight/10 - SmileyHead.headHeight/4 * rightEyebrowOffset.y
         });
 
         this._leftEye.setShape(results.landmarks.getLeftEye(), this._refWidth * 0.6);
         this._leftEye.setPosition({
-            x: (- this._eyeOrigin.x) + Head.headHeight/4 * leftEyebrowOffset.x,
-            y: this._eyeOrigin.y - Head.headHeight/13 * leftEyebrowOffset.y
+            x: (- this._eyeOrigin.x) + SmileyHead.headHeight/4 * leftEyebrowOffset.x,
+            y: this._eyeOrigin.y - SmileyHead.headHeight/13 * leftEyebrowOffset.y
         });
 
         this._rightEye.setShape(results.landmarks.getRightEye(), this._refWidth * 0.6);
         this._rightEye.setPosition({
-            x: this._eyeOrigin.x - Head.headHeight/4 * rightEyebrowOffset.x,
-            y: this._eyeOrigin.y - Head.headHeight/13 * rightEyebrowOffset.y
+            x: this._eyeOrigin.x - SmileyHead.headHeight/4 * rightEyebrowOffset.x,
+            y: this._eyeOrigin.y - SmileyHead.headHeight/13 * rightEyebrowOffset.y
         });
 
         this._mouth.setShape(results.landmarks.getMouth(), this._refWidth * 0.5);
         this._mouth.setPosition({
             x: 0,
-            y: Head.headHeight/4
+            y: SmileyHead.headHeight/3
         });
 
         this.update();

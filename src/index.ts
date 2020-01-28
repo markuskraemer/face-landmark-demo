@@ -1,15 +1,15 @@
 import './styles/global';
 import * as faceapi from 'face-api.js';
 import { IPoint, resizeResults as resizeDetections } from 'face-api.js';
-import { IMAGES } from './images';
 import { Geo } from './utils/geo';
 import { World } from './components/world';
 import { Head } from './components/body/head';
+import { SmileyHead } from './components/smiley/smiley-head';
 
 const video: HTMLVideoElement = <HTMLVideoElement>document.getElementById('video');
 let canvas: HTMLCanvasElement;
 let world:World;
-let head:Head;
+let head:Head | SmileyHead;
 let isMaximized = false;
 
 Promise.all([
@@ -42,7 +42,7 @@ function start() {
     toggleMaximize();
 
     world = new World(document.querySelector('#world'));
-    head = new Head(document.querySelector('#head'));
+    head = new SmileyHead(document.querySelector('#smiley-head'));
 
     navigator.getUserMedia(
         { video: {}},
@@ -116,47 +116,6 @@ function rotate(cx:number, cy:number, x:number, y:number, radians:number) {
     var ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
     return {x:nx, y:ny};
  }
-
-function drawLandmarks(results:faceapi.WithFaceLandmarks<any>) {
-    const rightEye = results.landmarks.getRightEye();
-    drawDebug(rightEye, 'red');
-    drawEye(IMAGES.EYE_RIGHT, rightEye, 1.8);
-
-    const leftEye = results.landmarks.getLeftEye();
-    drawDebug(leftEye, 'green');
-    drawEye(IMAGES.EYE_LEFT, leftEye, 1.6);
-}
-
-
-function drawEye(source:CanvasImageSource, positions:IPoint[], scale = 1) {
-    const left = positions[0].x;
-    const right = positions[3].x;
-    const top = positions[2].y;
-    const bottom = positions[5].y;
-    const eyeWidth = scale * (right - left);
-    const height = <number>source.height * (eyeWidth / <number>source.width);
-    const ctx = canvas.getContext('2d');
-
-    ctx.drawImage(source, 
-        left + (right-left)/2 - eyeWidth/2, 
-        top  + (bottom-top)/2 - height/2, 
-        eyeWidth, 
-        height);
-}
-
-function drawDebug(positions:IPoint[], color:string) {
-    const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = color;
-
-    ctx.beginPath();
-    ctx.moveTo(positions[0].x, positions[0].y);
-    positions.forEach(position => {
-        ctx.lineTo(position.x, position.y);
-    })
-
-    ctx.stroke();
-}
-
 
 
 start();
