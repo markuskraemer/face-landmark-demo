@@ -12,7 +12,7 @@ export class SmileyHead {
     public static headHeight = 300;
 
     private _eyeOrigin:IPoint = {
-        x: SmileyHead.headWidth/4,
+        x: SmileyHead.headWidth/5,
         y:- SmileyHead.headHeight/6
     };
 

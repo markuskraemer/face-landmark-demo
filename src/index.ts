@@ -7,17 +7,11 @@ import { Head } from './components/body/head';
 import { SmileyHead } from './components/smiley/smiley-head';
 
 const video: HTMLVideoElement = <HTMLVideoElement>document.getElementById('video');
+const image: HTMLImageElement = <HTMLImageElement>document.getElementById('image');
 let canvas: HTMLCanvasElement;
 let world:World;
 let head:Head | SmileyHead;
 let isMaximized = false;
-
-Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri('/assets/models'),
-    faceapi.nets.faceLandmark68Net.loadFromUri('/assets/models'),
-    faceapi.nets.faceRecognitionNet.loadFromUri('/assets/models'),
-    faceapi.nets.faceExpressionNet.loadFromUri('/assets/models'),
-]).then(start);
 
 function toggleMaximize () {
     console.log('toggleMaximize');
@@ -37,22 +31,70 @@ function updateMaximized () {
     }
 }
     
-function start() {
-
-    toggleMaximize();
+function init(){
+    updateMaximized();
 
     world = new World(document.querySelector('#world'));
     head = new SmileyHead(document.querySelector('#smiley-head'));
-
-    navigator.getUserMedia(
-        { video: {}},
-        stream => video.srcObject = stream,
-        err => console.error(err)
-    )
 }
 
-video.addEventListener('play', () => {
-    console.log('--- play ---');
+function loadLibraries() {
+    return Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri('/assets/models'),
+        faceapi.nets.faceLandmark68Net.loadFromUri('/assets/models'),
+        faceapi.nets.faceRecognitionNet.loadFromUri('/assets/models'),
+        faceapi.nets.faceExpressionNet.loadFromUri('/assets/models'),
+    ])
+}
+
+function startImage() {
+    init();
+    loadLibraries().then(() => {
+        console.log('libries loaded image complete: ', image.complete);
+        if (image.complete) {
+            startDetectingImage();
+        } else {
+            image.addEventListener('load', startDetectingImage);
+        }
+    });
+}
+
+function startVideo() {
+    init();
+    loadLibraries().then(() => {
+        console.log('##### promise all #######');
+        video.addEventListener('canplay', () => {
+            console.log('--- canplay ---');
+            startDetectingVideo();
+        })       
+
+        navigator.getUserMedia(
+            { video: {}},
+            stream => video.srcObject = stream,
+            err => console.error(err)
+        )
+  
+    });    
+}
+
+
+function startDetectingImage () {
+    canvas = faceapi.createCanvasFromMedia(image);
+    canvas.classList.add('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    const imageContainer = <HTMLDivElement>document.getElementById('image-container');
+    imageContainer.appendChild(canvas);
+    imageContainer.classList.remove('invisible');
+
+    faceapi.matchDimensions(canvas, { width:canvas.width, height:canvas.height });
+
+    update(image);
+}
+
+
+function startDetectingVideo () {
     canvas = faceapi.createCanvasFromMedia(video);
     canvas.classList.add('canvas');
     canvas.width = 720;
@@ -61,62 +103,25 @@ video.addEventListener('play', () => {
     const videoContainer = <HTMLDivElement>document.getElementById('video-container');
     videoContainer.appendChild(canvas);
  
-    const displaySize = { width:canvas.width, height:canvas.height };
-    faceapi.matchDimensions(canvas, displaySize);
+    faceapi.matchDimensions(canvas, { width:canvas.width, height:canvas.height });
 
     setInterval(async () => {
-        const results = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-            .withFaceLandmarks()
-        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-
-        const resizedResults = faceapi.resizeResults(results, displaySize);
-        // faceapi.draw.drawDetections(canvas, resizedResults);
-       
-        if(resizedResults.length > 0) {
-            faceapi.draw.drawFaceLandmarks(canvas, resizedResults);
-
-          //  drawLandmarks(resizedResults[0]);
-            const roll = Geo.getRoll(resizedResults[0]);
-            // drawRoll(resizedResults[0], roll);
-
-            const yaw = Geo.getYaw(resizedResults[0]);
-           // drawRoll(resizedResults[0], yaw);
-
-            head.setData(resizedResults[0]);
-        }
+        update(video);
     }, 100)
-});
-
-function drawRoll(results:faceapi.WithFaceLandmarks<any>, roll:number) {
-    
-    const rightEyeCenter = Geo.getCenterOfEye(results.landmarks.getRightEye());
-    const leftEyeCenter = Geo.getCenterOfEye(results.landmarks.getLeftEye());
-
-    const centerBetweenEyes = {
-        x:leftEyeCenter.x + (rightEyeCenter.x - leftEyeCenter.x) / 2,
-        y:leftEyeCenter.y + (rightEyeCenter.y - leftEyeCenter.y) / 2,
-    };
-
-    const bottomPoint = rotate(0, 0, 0, 400, roll);
-    
-    const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = 'red';
-
-    ctx.beginPath();
-    ctx.moveTo(centerBetweenEyes.x, centerBetweenEyes.y);
-    ctx.lineTo(centerBetweenEyes.x + bottomPoint.x, centerBetweenEyes.y + bottomPoint.y);
-
-    ctx.stroke();    
 }
 
-function rotate(cx:number, cy:number, x:number, y:number, radians:number) {
-    var cos = Math.cos(radians);
-    var sin = Math.sin(radians);
-    var nx = (cos * (x - cx)) + (sin * (y - cy)) + cx;
-    var ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
-    return {x:nx, y:ny};
- }
+async function update(input:faceapi.TNetInput){
+    const results = await faceapi.detectAllFaces(input, new faceapi.TinyFaceDetectorOptions())
+    .withFaceLandmarks()
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 
+    const resizedResults = faceapi.resizeResults(results, {width:canvas.width, height:canvas.height});
 
-start();
+    if(resizedResults.length > 0) {
+        faceapi.draw.drawFaceLandmarks(canvas, resizedResults);
+        head.setData(resizedResults[0]);
+    }
+}
+ 
+startImage();
 (<any>window).toggleMaximize = toggleMaximize;

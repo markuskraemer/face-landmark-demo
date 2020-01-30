@@ -1,12 +1,18 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
+        <meta charset="utf-8">	
         <title>Face Landmark Detection</title>
         <script type="module" defer src="bundle.js"></script>
     </head>
     <body>
         <div class="containers">
-            <div id="video-container">
+            <div id="invisible video-container">
                 <video id="video" width="720" height="560" autoplay muted></video>
+            </div>
+
+            <div id="image-container" class="invisible image-container">
+                <img id="image" class="image" src="assets/images/obama.jpg" >
             </div>
             <div id="output-container">
                 <div id="toggleMaximize-button" onclick="toggleMaximize()">maximize</div>
@@ -22,6 +28,7 @@
                                 <path></path>
                             </svg>
                             <svg id="mouth" class="container smiley__mouth">
+                                <path></path>
                                 <path></path>
                             </svg>        
                         </div>
@@ -239,11 +246,9 @@
                                         <div class="mouth__seqment__side mouth__seqment__side-front"></div>
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
-                    </svg>
+                    </div>
                 </div>
             </div>
         </div>

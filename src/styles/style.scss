@@ -15,6 +15,22 @@ body {
     display: none;
 }
 
+.image-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .image {
+        width:720px;
+        height:auto;
+    }
+
+    .canvas {
+        position: absolute;
+    }
+}
+
 #video-container {
     position: relative;
     display: flex;
