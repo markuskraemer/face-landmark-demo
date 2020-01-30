@@ -52,9 +52,9 @@ function startImage() {
     loadLibraries().then(() => {
         console.log('libries loaded image complete: ', image.complete);
         if (image.complete) {
-            startDetectingImage();
+            setTimeout(startDetectingImage, 1500);
         } else {
-            image.addEventListener('load', startDetectingImage);
+            image.addEventListener('load', () => setTimeout(startDetectingImage, 1500));
         }
     });
 }
@@ -79,14 +79,16 @@ function startVideo() {
 
 
 function startDetectingImage () {
+
+    const imageContainer = <HTMLDivElement>document.getElementById('image-container');
+    imageContainer.classList.remove('invisible');
+
     canvas = faceapi.createCanvasFromMedia(image);
     canvas.classList.add('canvas');
     canvas.width = image.width;
     canvas.height = image.height;
 
-    const imageContainer = <HTMLDivElement>document.getElementById('image-container');
     imageContainer.appendChild(canvas);
-    imageContainer.classList.remove('invisible');
 
     faceapi.matchDimensions(canvas, { width:canvas.width, height:canvas.height });
 
@@ -95,14 +97,18 @@ function startDetectingImage () {
 
 
 function startDetectingVideo () {
+    
+    const videoContainer = <HTMLDivElement>document.getElementById('video-container');
+    videoContainer.classList.remove('invisible');
+
     canvas = faceapi.createCanvasFromMedia(video);
     canvas.classList.add('canvas');
-    canvas.width = 720;
-    canvas.height = 560;
+    canvas.width = video.width;
+    canvas.height = video.height;
 
-    const videoContainer = <HTMLDivElement>document.getElementById('video-container');
     videoContainer.appendChild(canvas);
- 
+
+
     faceapi.matchDimensions(canvas, { width:canvas.width, height:canvas.height });
 
     setInterval(async () => {
@@ -123,5 +129,5 @@ async function update(input:faceapi.TNetInput){
     }
 }
  
-startImage();
+startVideo();
 (<any>window).toggleMaximize = toggleMaximize;

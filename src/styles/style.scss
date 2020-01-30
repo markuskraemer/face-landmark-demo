@@ -12,7 +12,7 @@ body {
 }
 
 .invisible {
-    display: none;
+    display: none !important;
 }
 
 .image-container {
@@ -22,7 +22,7 @@ body {
     justify-content: center;
 
     .image {
-        width:720px;
+        width:400px;
         height:auto;
     }
 
