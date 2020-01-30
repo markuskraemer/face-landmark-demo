@@ -16,8 +16,8 @@ export class SmileyMouth {
 
     private mapPoint(p:IPoint, center:IPoint, refWidth:number, pathWidth:number, pathHeight:number){
         return { 
-            x: 40 * (p.x - center.x) / refWidth + 20 * pathWidth,  
-            y: 40 * (p.y - center.y) / refWidth + 20 * pathHeight
+            x: 40 * (p.x - center.x) / refWidth + pathWidth,  
+            y: 40 * (p.y - center.y) / refWidth + pathHeight
         }
     }
 
@@ -53,36 +53,38 @@ export class SmileyMouth {
         const outerMouth = points.slice(0, 12);
         const innerMouth = points.slice(12);
 
+        const w = (outerMouth[6].x - outerMouth[0].x);
+        const h = (outerMouth[9].y - outerMouth[2].y);
+        const extraspace = 40;
+
         const center = {
-            x:outerMouth[0].x + (outerMouth[6].x - outerMouth[0].x)/2,
-            y:outerMouth[2].y + (outerMouth[9].y - outerMouth[2].y)/2,
+            x:outerMouth[0].x + w/2,
+            y:outerMouth[2].y + h/2,
         }
 
-        const pathWidth = Math.abs((outerMouth[6].x - outerMouth[0].x) / refWidth);
-        const pathHeight = Math.abs((outerMouth[9].y - outerMouth[2].y) / refWidth);
+        const pathWidth = Math.abs(w / refWidth);
+        const pathHeight = Math.abs(h / refWidth);
+        const elemWidth = 40 * pathWidth + 40;
+        const elemHeight = 40 * pathHeight + 40;
 
         const mappedOuterMouth = outerMouth.map((p:IPoint) => 
-            this.mapPoint(p, center, refWidth, pathWidth, pathHeight)
+            this.mapPoint(p, center, refWidth, elemWidth / 2, elemHeight / 2)
         );
 
         const mappedInnerMouth = innerMouth.map((p:IPoint) => 
-            this.mapPoint(p, center, refWidth, pathWidth, pathHeight)
+            this.mapPoint(p, center, refWidth, elemWidth / 2, elemHeight / 2)
         ); 
 
         const elem:any = this.element;
-        const extraspace = 40;
-//        elem.setAttribute ('width', 40 * pathWidth + extraspace);
-//        elem.setAttribute ('height', 40 * pathHeight + extraspace);
-        const w = 40 * pathWidth + extraspace;
-        const h = 40 * pathHeight + extraspace;
-        elem.setAttribute ('viewbox', (-w/2) + ' ' + (-h/2) + ' ' + w + ' ' + h);          
-        /*
+        elem.setAttribute ('width', elemWidth);
+        elem.setAttribute ('height', elemHeight);
+        
         const outerPathElem:any = this.element.children[0];
         outerPathElem.setAttribute ('d', this.drawPath(mappedOuterMouth));
         outerPathElem.setAttribute ('stroke', 'black');
         outerPathElem.setAttribute ('stroke-width', '2');
         outerPathElem.setAttribute ('fill', 'none');
-        */
+        
         const innerPathElem:any = this.element.children[1];
         innerPathElem.setAttribute ('d', this.drawPath(mappedInnerMouth));
         innerPathElem.setAttribute ('stroke', 'black');

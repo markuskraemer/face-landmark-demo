@@ -2,7 +2,7 @@ import hotkeys from 'hotkeys-js';
 
 export class World {
 
-    private _rotationY:number = -20;
+    private _rotationY:number = 0;
     private _zoom:number = 40;
 
     constructor(public element:HTMLElement){

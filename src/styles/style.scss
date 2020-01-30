@@ -20,14 +20,23 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    width:400px;
 
     .image {
-        width:400px;
+        position: absolute;
+        width:inherit;
         height:auto;
     }
 
     .canvas {
         position: absolute;
+    }
+
+    .select {
+        position: absolute;
+        top:10px;
+        left:10px;
+        z-index: 1
     }
 }
 

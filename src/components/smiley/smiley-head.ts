@@ -18,9 +18,6 @@ export class SmileyHead {
 
     private _refWidth:number = 0;
 
-    private _pitch:number = 0;
-    private _yaw:number = 0;
-
     private _leftEyebrow:SmileyEyebrow;
     private _rightEyebrow:SmileyEyebrow;
     private _leftEye:SmileyEye;
@@ -38,13 +35,6 @@ export class SmileyHead {
     public setData(results:faceapi.WithFaceLandmarks<any>) {
         this.element.classList.remove('invisible');
         this.updateRefWidth(results);
-
-        if(this._yaw != 0){
-          //  return;
-        }
-
-        this._yaw = Geo.getYaw(results);
-        this._pitch = Geo.getPitch(results);
 
         const leftEyebrowOffset = Geo.getLeftEyebrowOffset(results);
         this._leftEyebrow.setShape(results.landmarks.getLeftEyeBrow());
@@ -78,7 +68,6 @@ export class SmileyHead {
             y: SmileyHead.headHeight/3
         });
 
-        this.update();
     }
 
     private updateRefWidth(results:faceapi.WithFaceLandmarks<any>){
@@ -87,10 +76,14 @@ export class SmileyHead {
         this._refWidth = rightEyeCenter.x - leftEyeCenter.x;
     }
 
-    public update() {
+    public setRotationByResults(results:faceapi.WithFaceLandmarks<any>){
+        this.setRotation(Geo.getYaw(results), Geo.getPitch(results)); 
+    }
+
+    public setRotation(yaw:number, pitch:number){
         TweenLite.to(this.element, 1, {
-            rotateY:this._yaw / Math.PI * 180, 
-            rotateX:this._pitch / Math.PI * 180
+            rotateY: yaw / Math.PI * 180, 
+            rotateX: pitch / Math.PI * 180
         });
     }
 

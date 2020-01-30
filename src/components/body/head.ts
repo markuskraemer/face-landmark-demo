@@ -19,9 +19,6 @@ export class Head {
 
     private _refWidth:number = 0;
 
-    private _pitch:number = 0;
-    private _yaw:number = 0;
-
     private _leftEyebrow:Eyebrow;
     private _rightEyebrow:Eyebrow;
     private _leftEye:Eye;
@@ -39,13 +36,6 @@ export class Head {
     public setData(results:faceapi.WithFaceLandmarks<any>) {
         this.element.classList.remove('invisible');
         this.updateRefWidth(results);
-
-        if(this._yaw != 0){
-           // return;
-        }
-
-        this._yaw = Geo.getYaw(results);
-        this._pitch = Geo.getPitch(results);
 
         const leftEyebrowOffset = Geo.getLeftEyebrowOffset(results);
         this._leftEyebrow.setShape(results.landmarks.getLeftEyeBrow());
@@ -79,7 +69,6 @@ export class Head {
             y: Head.headHeight/4
         });
 
-        this.update();
     }
 
     private updateRefWidth(results:faceapi.WithFaceLandmarks<any>){
@@ -88,10 +77,14 @@ export class Head {
         this._refWidth = rightEyeCenter.x - leftEyeCenter.x;
     }
 
-    public update() {
+    public setRotationByResults(results:faceapi.WithFaceLandmarks<any>){
+        this.setRotation(Geo.getYaw(results), Geo.getPitch(results)); 
+    }
+
+    public setRotation(yaw:number, pitch:number){
         TweenLite.to(this.element, 1, {
-            rotateY:this._yaw / Math.PI * 180, 
-            rotateX:this._pitch / Math.PI * 180
+            rotateY: yaw / Math.PI * 180,  
+            rotateX: pitch / Math.PI * 180
         });
     }
 

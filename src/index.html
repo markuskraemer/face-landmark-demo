@@ -12,9 +12,12 @@
             </div>
 
             <div id="image-container" class="image-container invisible">
+                <select id="image-select" onchange="selectImage(selectedIndex)" class="select">
+                </select>
                 <img id="image" class="image" src="assets/images/obama.jpg" >
             </div>
             <div id="output-container">
+                <input type="checkbox" id="turn-head-checkbox" onchange="changeTurnHead(checked)">Turn Head
                 <div id="toggleMaximize-button" onclick="toggleMaximize()">maximize</div>
                 <div id="world-container">
                     <div id="world">

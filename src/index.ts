@@ -5,6 +5,7 @@ import { Geo } from './utils/geo';
 import { World } from './components/world';
 import { Head } from './components/body/head';
 import { SmileyHead } from './components/smiley/smiley-head';
+import { images } from './images.model';
 
 const video: HTMLVideoElement = <HTMLVideoElement>document.getElementById('video');
 const image: HTMLImageElement = <HTMLImageElement>document.getElementById('image');
@@ -12,11 +13,35 @@ let canvas: HTMLCanvasElement;
 let world:World;
 let head:Head | SmileyHead;
 let isMaximized = false;
+let imageIdx = 0;
+let doTurnHead:boolean = true;
+let mode: 'video' | 'image';
+
+
+function changeTurnHead (flag:boolean){
+    doTurnHead = flag;
+    updateDoTurnHead();
+    update();
+}
+
+function updateDoTurnHead(){
+    const checkbox = <HTMLFormElement>document.querySelector('#turn-head-checkbox');
+    checkbox.checked = doTurnHead;
+}
 
 function toggleMaximize () {
     console.log('toggleMaximize');
     isMaximized = !isMaximized;
     updateMaximized();
+}
+
+function selectImage(idx:number){
+    console.log('selectImage: ' + idx);
+    if(imageIdx != idx){
+        imageIdx = idx;
+        image.src = images[imageIdx];
+        onImageChanged();
+    }
 }
 
 function updateMaximized () {
@@ -33,9 +58,17 @@ function updateMaximized () {
     
 function init(){
     updateMaximized();
-
+    updateDoTurnHead ();
+    
     world = new World(document.querySelector('#world'));
     head = new SmileyHead(document.querySelector('#smiley-head'));
+
+    const imageSelect = document.querySelector('#image-select');
+    images.forEach((image, i) => {
+        const optionElem = document.createElement('option');
+        optionElem.innerHTML = String(i);
+        imageSelect.appendChild(optionElem);
+    })
 }
 
 function loadLibraries() {
@@ -48,18 +81,22 @@ function loadLibraries() {
 }
 
 function startImage() {
+    mode = 'image';
     init();
-    loadLibraries().then(() => {
-        console.log('libries loaded image complete: ', image.complete);
-        if (image.complete) {
-            setTimeout(startDetectingImage, 1500);
-        } else {
-            image.addEventListener('load', () => setTimeout(startDetectingImage, 1500));
-        }
-    });
+    loadLibraries().then(onImageChanged);
+}
+
+function onImageChanged(){    
+    console.log('libries loaded image complete: ', image.complete);
+    if (image.complete) {
+        startDetectingImage ();
+    } else {
+        image.addEventListener('load', startDetectingImage);
+    }
 }
 
 function startVideo() {
+    mode = 'video';
     init();
     loadLibraries().then(() => {
         console.log('##### promise all #######');
@@ -83,16 +120,18 @@ function startDetectingImage () {
     const imageContainer = <HTMLDivElement>document.getElementById('image-container');
     imageContainer.classList.remove('invisible');
 
-    canvas = faceapi.createCanvasFromMedia(image);
-    canvas.classList.add('canvas');
+    if(canvas == undefined){
+        canvas = faceapi.createCanvasFromMedia(image);
+        canvas.classList.add('canvas');
+        imageContainer.appendChild(canvas);
+    }
     canvas.width = image.width;
     canvas.height = image.height;
 
-    imageContainer.appendChild(canvas);
 
     faceapi.matchDimensions(canvas, { width:canvas.width, height:canvas.height });
 
-    update(image);
+    update();
 }
 
 
@@ -112,12 +151,15 @@ function startDetectingVideo () {
     faceapi.matchDimensions(canvas, { width:canvas.width, height:canvas.height });
 
     setInterval(async () => {
-        update(video);
+        update();
     }, 100)
 }
 
-async function update(input:faceapi.TNetInput){
-    const results = await faceapi.detectAllFaces(input, new faceapi.TinyFaceDetectorOptions())
+async function update(){
+
+    const inputElem = mode == 'image' ? image : video;
+
+    const results = await faceapi.detectAllFaces(inputElem, new faceapi.TinyFaceDetectorOptions())
     .withFaceLandmarks()
     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 
@@ -126,8 +168,15 @@ async function update(input:faceapi.TNetInput){
     if(resizedResults.length > 0) {
         faceapi.draw.drawFaceLandmarks(canvas, resizedResults);
         head.setData(resizedResults[0]);
+        if(doTurnHead){
+            head.setRotationByResults(resizedResults[0]);
+        }else{
+            head.setRotation(0, 0);
+        }
     }
 }
  
-startVideo();
+startImage();
 (<any>window).toggleMaximize = toggleMaximize;
+(<any>window).selectImage = selectImage;
+(<any>window).changeTurnHead = changeTurnHead;
