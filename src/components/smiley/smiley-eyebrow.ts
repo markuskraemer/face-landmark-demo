@@ -21,8 +21,8 @@ export class SmileyEyebrow {
         const height = width/2;
         let mapped = points.map((p:IPoint) => {
             return { 
-                x: 40 * (p.x - points[0].x) / width + 10,  
-                y: 20 * (p.y - points[2].y) / height + 10
+                x: 40 * (p.x - points[0].x) / width + (width + 20 - 40) / 2,  
+                y: 20 * (p.y - points[2].y) / height + (height) / 2
             }
         });
         
