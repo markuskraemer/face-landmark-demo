@@ -16,13 +16,15 @@ export class SmileyEyebrow {
         });
     }
     
-    public setShape(points:IPoint[]) {
-        const width = Math.abs(points[points.length-1].x - points[0].x);
+    public setShape(rawPoints:IPoint[]) {
+        const width = Math.abs(rawPoints[rawPoints.length-1].x - rawPoints[0].x);
         const height = width/2;
-        let mapped = points.map((p:IPoint) => {
+        const t = .4;
+
+        let points = rawPoints.map((p:IPoint) => {
             return { 
-                x: 40 * (p.x - points[0].x) / width + (width + 20 - 40) / 2,  
-                y: 20 * (p.y - points[2].y) / height + (height) / 2
+                x: 40 * (p.x - rawPoints[0].x) / width + (width + 20 - 40) / 2,  
+                y: 20 * (p.y - rawPoints[2].y) / height + (height) / 2
             }
         });
         
@@ -31,20 +33,31 @@ export class SmileyEyebrow {
         elem.setAttribute ('height', height + 20);
 
         let path = '';
-        for(let i = 0; i < mapped.length; ++i){
-            if(i === 0){
-                path += 'M' + mapped[i].x + ' ' + mapped[i].y;
-            } else {
-                path += ' L' + mapped[i].x + ' ' + mapped[i].y;
-                if(i === mapped.length - 1){
-                   // path += ' Z';
-                }
-            }
+        for(let i = 1; i < points.length; ++i){
+
+            const idx0 = (i - 1 + points.length) % points.length;
+            const idx1 = i % points.length;
+            const idx2 = (i + 1) % points.length;
+
+            const controllPoints = Math2.splineCurve (
+                points[idx0],
+                points[idx1],
+                points[idx2],
+                t
+            );
+
+            if(i === 1){
+                path += 'M' + points[i].x + ' ' + points[i].y;
+            } 
+            path += ' S' 
+                + controllPoints.previous.x + ' ' + controllPoints.previous.y + ', ' 
+                + points[idx1].x + ' ' + points[idx1].y;
+
         }        
         const pathElem:any = this.element.children[0];
         pathElem.setAttribute ('d', path);
         pathElem.setAttribute ('stroke', 'black');
-        pathElem.setAttribute ('stroke-width', '10');
+        pathElem.setAttribute ('stroke-width', '5');
         pathElem.setAttribute ('fill', 'none');
     }
 }
