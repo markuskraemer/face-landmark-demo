@@ -5,18 +5,44 @@ import { Geo } from './utils/geo';
 import { World } from './components/world';
 import { Head } from './components/body/head';
 import { SmileyHead } from './components/smiley/smiley-head';
-import { images } from './images.model';
+import { sources } from './sources.model';
 
 const video: HTMLVideoElement = <HTMLVideoElement>document.getElementById('video');
 const image: HTMLImageElement = <HTMLImageElement>document.getElementById('image');
+let imageCanvas: HTMLCanvasElement;
+let videoCanvas: HTMLCanvasElement;
 let canvas: HTMLCanvasElement;
+
 let world:World;
 let head:Head | SmileyHead;
 let isMaximized = false;
-let imageIdx = 0;
+let sourceIdx = 0;
 let doTurnHead:boolean = true;
 let mode: 'video' | 'image';
+let intervalId:NodeJS.Timeout;
 
+function setMode(value:'video' | 'image') {
+    mode = value;
+
+    const imageContainer = <HTMLDivElement>document.getElementById('image-container');
+    const videoContainer = <HTMLDivElement>document.getElementById('video-container');
+
+    switch(mode){
+        case 'video':
+            videoContainer.classList.remove('invisible');
+            imageContainer.classList.add('invisible');
+            break;
+        case 'image':
+            videoContainer.classList.add('invisible');
+            imageContainer.classList.remove('invisible');
+            break;
+    }
+}
+
+
+function clearUpdateInterval(){
+    clearInterval(intervalId);
+}
 
 function changeTurnHead (flag:boolean){
     doTurnHead = flag;
@@ -30,17 +56,21 @@ function updateDoTurnHead(){
 }
 
 function toggleMaximize () {
-    console.log('toggleMaximize');
     isMaximized = !isMaximized;
     updateMaximized();
 }
 
 function selectImage(idx:number){
-    console.log('selectImage: ' + idx);
-    if(imageIdx != idx){
-        imageIdx = idx;
-        image.src = images[imageIdx];
-        onImageChanged();
+    if(sourceIdx != idx){
+        sourceIdx = idx;
+        const source = sources[sourceIdx];
+        clearUpdateInterval();
+        if(source.title == 'Camera'){
+            onVideoChanged();
+        }else{
+            image.src = source.src;
+            onImageChanged();
+        }
     }
 }
 
@@ -59,14 +89,14 @@ function updateMaximized () {
 function init(){
     updateMaximized();
     updateDoTurnHead ();
-    
+
     world = new World(document.querySelector('#world'));
     head = new SmileyHead(document.querySelector('#smiley-head'));
 
     const imageSelect = document.querySelector('#image-select');
-    images.forEach((image, i) => {
+    sources.forEach((source, i) => {
         const optionElem = document.createElement('option');
-        optionElem.innerHTML = String(i);
+        optionElem.innerHTML = source.title;
         imageSelect.appendChild(optionElem);
     })
 }
@@ -81,13 +111,14 @@ function loadLibraries() {
 }
 
 function startImage() {
-    mode = 'image';
+    sourceIdx = 1;
     init();
     loadLibraries().then(onImageChanged);
 }
 
 function onImageChanged(){    
     console.log('libries loaded image complete: ', image.complete);
+    setMode('image');
     if (image.complete) {
         startDetectingImage ();
     } else {
@@ -95,39 +126,43 @@ function onImageChanged(){
     }
 }
 
-function startVideo() {
-    mode = 'video';
-    init();
-    loadLibraries().then(() => {
-        console.log('##### promise all #######');
-        video.addEventListener('canplay', () => {
-            console.log('--- canplay ---');
-            startDetectingVideo();
-        })       
-
+function onVideoChanged(){
+    console.log('##### onVideoChanged ####### ', video.readyState);
+    setMode('video');
+    
+    if(video.readyState == 0){
         navigator.getUserMedia(
             { video: {}},
             stream => video.srcObject = stream,
             err => console.error(err)
         )
-  
-    });    
+    
+        video.addEventListener('canplay', () => {
+            console.log('--- canplay ---');
+            startDetectingVideo();
+        })           
+    }else{
+        startDetectingVideo();
+    }
 }
 
+function startVideo() {
+    sourceIdx = 0;
+    init();
+    loadLibraries().then(onVideoChanged);
+}
 
 function startDetectingImage () {
-
     const imageContainer = <HTMLDivElement>document.getElementById('image-container');
-    imageContainer.classList.remove('invisible');
 
-    if(canvas == undefined){
-        canvas = faceapi.createCanvasFromMedia(image);
-        canvas.classList.add('canvas');
-        imageContainer.appendChild(canvas);
+    if(imageCanvas == undefined){
+        imageCanvas = faceapi.createCanvasFromMedia(image);
+        imageCanvas.classList.add('canvas');
+        imageContainer.appendChild(imageCanvas);    
     }
+    canvas = imageCanvas;
     canvas.width = image.width;
-    canvas.height = image.height;
-
+    canvas.height = image.height;        
 
     faceapi.matchDimensions(canvas, { width:canvas.width, height:canvas.height });
 
@@ -135,24 +170,23 @@ function startDetectingImage () {
 }
 
 
-function startDetectingVideo () {
-    
+function startDetectingVideo () {    
     const videoContainer = <HTMLDivElement>document.getElementById('video-container');
-    videoContainer.classList.remove('invisible');
 
-    canvas = faceapi.createCanvasFromMedia(video);
-    canvas.classList.add('canvas');
+    if(videoCanvas == undefined){
+        videoCanvas = faceapi.createCanvasFromMedia(video);
+        videoCanvas.classList.add('canvas');
+        videoContainer.appendChild(videoCanvas);    
+    }
+    canvas = videoCanvas;
     canvas.width = video.width;
     canvas.height = video.height;
 
-    videoContainer.appendChild(canvas);
-
-
     faceapi.matchDimensions(canvas, { width:canvas.width, height:canvas.height });
 
-    setInterval(async () => {
+    intervalId = setInterval(async () => {
         update();
-    }, 100)
+    }, 200)
 }
 
 async function update(){

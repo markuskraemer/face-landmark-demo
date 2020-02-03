@@ -11,17 +11,26 @@ body {
     justify-content: center;
 }
 
+.source-container {
+    width: 400px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    border:2px white solid;
+}
+
 .invisible {
     display: none !important;
 }
 
-.image-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width:400px;
+.source-select {
+    position: absolute;
+    top:10px;
+    left:10px;
+    z-index: 1
+}
 
+.image-container {
     .image {
         position: absolute;
         width:inherit;
@@ -31,22 +40,10 @@ body {
     .canvas {
         position: absolute;
     }
-
-    .select {
-        position: absolute;
-        top:10px;
-        left:10px;
-        z-index: 1
-    }
 }
 
-#video-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    #video {
+.video-container {
+    .video {
         background:black;
     }
 
