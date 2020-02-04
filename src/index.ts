@@ -22,20 +22,23 @@ let mode: 'video' | 'image';
 let intervalId:NodeJS.Timeout;
 
 function setMode(value:'video' | 'image') {
-    mode = value;
+   
+    if(mode != value){
+        mode = value;
 
-    const imageContainer = <HTMLDivElement>document.getElementById('image-container');
-    const videoContainer = <HTMLDivElement>document.getElementById('video-container');
+        const imageContainer = <HTMLDivElement>document.getElementById('image-container');
+        const videoContainer = <HTMLDivElement>document.getElementById('video-container');
 
-    switch(mode){
-        case 'video':
-            videoContainer.classList.remove('invisible');
-            imageContainer.classList.add('invisible');
-            break;
-        case 'image':
-            videoContainer.classList.add('invisible');
-            imageContainer.classList.remove('invisible');
-            break;
+        switch(mode){
+            case 'video':
+                videoContainer.classList.remove('invisible');
+                imageContainer.classList.add('invisible');
+                break;
+            case 'image':
+                videoContainer.classList.add('invisible');
+                imageContainer.classList.remove('invisible');
+                break;
+        }
     }
 }
 
@@ -93,12 +96,13 @@ function init(){
     world = new World(document.querySelector('#world'));
     head = new SmileyHead(document.querySelector('#smiley-head'));
 
-    const imageSelect = document.querySelector('#image-select');
+    const imageSelect = <HTMLSelectElement>document.querySelector('#image-select');
     sources.forEach((source, i) => {
         const optionElem = document.createElement('option');
         optionElem.innerHTML = source.title;
         imageSelect.appendChild(optionElem);
     })
+    imageSelect.selectedIndex = sourceIdx;
 }
 
 function loadLibraries() {
@@ -132,13 +136,22 @@ function onVideoChanged(){
     
     if(video.readyState == 0){
         navigator.getUserMedia(
-            { video: {}},
-            stream => video.srcObject = stream,
+            { video: { } },
+            stream => {
+                video.srcObject = stream
+            },
             err => console.error(err)
         )
-    
-        video.addEventListener('canplay', () => {
-            console.log('--- canplay ---');
+
+        video.addEventListener('canplay', (ev:Event) => {
+            console.log('--- canplay ---', ev);
+            const videoWidth = ev.target['videoWidth'];
+            const videoHeight = ev.target['videoHeight'];
+
+            video.height = videoHeight * (400 / videoWidth);
+
+            console.log('targetvideo: ' + videoWidth + '|' + videoHeight + ' - ' + video.width + '|' + video.height); 
+
             startDetectingVideo();
         })           
     }else{
@@ -166,7 +179,7 @@ function startDetectingImage () {
 
     faceapi.matchDimensions(canvas, { width:canvas.width, height:canvas.height });
 
-    update();
+    requestAnimationFrame(update);
 }
 
 
@@ -186,15 +199,14 @@ function startDetectingVideo () {
 
     intervalId = setInterval(async () => {
         update();
-    }, 200)
+    }, 2000)
 }
 
 async function update(){
 
     const inputElem = mode == 'image' ? image : video;
-
     const results = await faceapi.detectAllFaces(inputElem, new faceapi.TinyFaceDetectorOptions())
-    .withFaceLandmarks()
+        .withFaceLandmarks()
     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 
     const resizedResults = faceapi.resizeResults(results, {width:canvas.width, height:canvas.height});
