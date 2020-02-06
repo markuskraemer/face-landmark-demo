@@ -222,6 +222,7 @@ async function update(){
     }
 }
  
+ 
 startImage();
 (<any>window).toggleMaximize = toggleMaximize;
 (<any>window).selectImage = selectImage;
